@@ -7,16 +7,15 @@ const { authenticateToken } = require("./auth");
 // create-task
 router.post("/create-task", authenticateToken, async (req, res) => {
     try {
-        const { title, desc,user } = req.body;
+        const { title, desc,user,project ,member} = req.body;
         console.log(title,desc,user,req.body)
         if (!title || !desc) {
             return res.status(400).json({ message: "Missing required fields" });
         }
 
         // Create and save new task
-        const newTask = new Task({ title, desc,user,complete:false });
+        const newTask = new Task({ title, desc,user,complete:false ,project,member});
         const savedTask = await newTask.save();
-
         // Update user with new task reference 
         // await User.findByIdAndUpdate(userId, { $push: { tasks: savedTask._id } });
 
@@ -28,14 +27,12 @@ router.post("/create-task", authenticateToken, async (req, res) => {
 });
 
 // get all tasks
-router.get("/get-all-tasks", authenticateToken, async (req, res) => {
+router.post("/get-all-tasks", async (req, res) => {
     try {
-        const userId = req.user.id; 
-        const userData = await User.findById(userId).populate({
-            path: "tasks",
-            options: { sort: { createdAt: -1 }},
-        });
-        res.status(200).json({ data: userData.tasks });
+        const userId = req.body.project; 
+        const userData = await Task.find({project:userId})
+        console.log(userData,userId)
+      return  res.status(200).json({ data: userData });
     } catch (error) {
         console.log(error);
         res.status(500).json({ message: "Internal Server Error" });
@@ -158,9 +155,11 @@ router.get("/get-incomplete-tasks", authenticateToken, async (req, res) => {
     }
 });
 
-router.get("/get", authenticateToken, async (req, res) => {
+router.post("/get-tasks", async (req, res) => {
     try {
-        return res.status(200).json(req.user)
+        let {project}=req.body
+        let tasks=await Task.find({project:project})
+        return res.status(200).json({task:tasks})
         // const userId = req.user.id; 
         // const userData = await User.findById(userId).populate({
         //     path: "tasks",

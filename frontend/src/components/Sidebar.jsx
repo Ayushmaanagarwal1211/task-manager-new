@@ -12,35 +12,15 @@ import './sidebar.css'; // Adjust the path as needed
 const Sidebar = () => {
     const data = [
         {
+            title: "Home",
+            icon: <CgNotes className="icon" />,
+            link: '/home',
+        }
+        ,{
             title: "All tasks",
             icon: <CgNotes className="icon" />,
-            link: '/',
-        },
-        {
-            title: "Important tasks",
-            icon: <MdLabelImportant className="icon" />,
-            link: '/importanttasks',
-        },
-        {
-            title: "Completed tasks",
-            icon: <FaCheckDouble className="icon" />,
-            link: '/completedtasks',
-        },
-        {
-            title: "Incomplete tasks",
-            icon: <TbNotebookOff className="icon" />,
-            link: '/incompletedtasks',
-        },
-        {
-            title: "Notifications",
-            icon: <IoMdNotificationsOutline className="icon" />,
-            link: '/notifications',
-        },
-        {
-            title: "Calendar",
-            icon: <AiOutlineCalendar className="icon" />,
-            link: '/calendar',
-        },
+            link: '/alltasks',
+        }
     ];
 
     return (
@@ -60,12 +40,7 @@ const Sidebar = () => {
             </div>
             <div className="sidebar-footer">
                 {/* Chat Button */}
-                <Link to="/chat" className="sidebar-item sidebar-chat">
-                    <div className="icon">
-                        <BsChatDots />
-                    </div>
-                    <div className="title">Chat</div>
-                </Link>
+               
                 {/* Logout Button */}
                 <button className="logout-button">
                     Logout

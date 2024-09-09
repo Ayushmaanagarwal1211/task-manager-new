@@ -40,26 +40,49 @@
 
 // export default InputData;
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { IoMdCloseCircle } from 'react-icons/io';
 import { useNavigate } from 'react-router-dom';
 
 const InputData = ({ InputDiv, setInputDiv }) => {
+  let [members,setMembers]=useState([])
+  useEffect(()=>{
+      fetchData()
+      },[])
+  async function fetchData(){
+      let project=JSON.parse(localStorage.getItem("project"))
+      console.log(project)
+      let data=await fetch('http://localhost:3001/api/v1/users',{method:"GET"})
+      data=await data.json()
+      data=data.users
+      console.log(data,'sdsdsd')
+      if(project){
+
+        data=data.filter((d)=>project[0].members.includes(d._id))
+      }
+
+      setMembers([...data])
+  }   
   const [tasks, setTasks] = useState([]);
   const [newTask, setNewTask] = useState('');
   const [description, setDescription] = useState('');
   const navigate = useNavigate();
-
+let [member,setMember]=useState('')
   const handleClose = () => {
     setInputDiv("hidden");
   };
 
   const handleSubmit = async (e) => {
+
     e.preventDefault();
+    let project=JSON.parse(localStorage.getItem('project'))[0]
+    console.log(project)
     let formData={
       title:newTask,
       desc:description,
-      user:JSON.parse(localStorage.getItem('user')).id
+      user:JSON.parse(localStorage.getItem('user')).id,
+      project:project._id,
+      member:member
     }
     console.log(formData)
     let token=localStorage.getItem("token")
@@ -76,10 +99,14 @@ const InputData = ({ InputDiv, setInputDiv }) => {
       setTasks([...tasks, task]);
       setNewTask('');
       setDescription('');
+      handleClose()
       // navigate('/all-tasks', { state: { tasks: [...tasks, task] } });
     }
   };
-
+function handleClick1(e){
+  const selectedIndex = e.target.value;
+  setMember(members[selectedIndex]._id);
+}
   return (
     <>
       <div className={`${InputDiv} fixed top-0 left-0 bg-gray-800 opacity-80 h-screen w-full`}></div>
@@ -104,6 +131,16 @@ const InputData = ({ InputDiv, setInputDiv }) => {
               onChange={(e) => setDescription(e.target.value)}
               className="w-full p-2 mb-4 rounded"
             />
+            <select onChange={handleClick1}>
+              <option>'sdsdsdsds</option>
+              {
+                members.map((data,index)=>
+                  
+               <option key={data._id} value={index} >{data.username}</option>
+                )
+              }
+            </select>
+            <br></br>
             <button type="submit" className="bg-blue-500 text-white p-2 rounded">Submit</button>
           </form>
         </div>

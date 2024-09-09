@@ -11,6 +11,7 @@ import ImportantTasks from './pages/Importanttasks';
 import CompletedTasks from './pages/Completedtasks';
 import IncompletedTasks from './pages/Incompletedtasks';
 import AddProject from './components/AddProject';
+import Dash from './pages/Dash';
 // import AddProject from './components/AddProject';
 function App() {
 
@@ -19,18 +20,20 @@ function App() {
       <BrowserRouter>
         <Routes>
         {/* <Route path="/add-project" component={AddProject} /> */}
-          <Route  path='/landing' element={<Landing/>}/>
+          <Route  path='/' element={<Landing/>}/>
           <Route path='/login'element={<Login/>}></Route>
           <Route path='/signup'element={<Signin/>}></Route>
-          <Route exact path='/' element={<Home />}>
-          <Route index element={<Alltasks />}/>
+          <Route exact path='/dashboard' element={<Home />}>
+          </Route>  
+          <Route path='/home' element={<Dash />}/>
+
+          <Route path='/alltasks' element={<Alltasks />}/>
           <Route path='/importanttasks' element={<ImportantTasks />}/>
           <Route path='/completedtasks' element={<CompletedTasks />}/>
           <Route path='/incompletedtasks' element={<IncompletedTasks />}/>
 
 
 
-          </Route>  
           <Route path="/admin" element={<AddProject/>}></Route>
         </Routes>
       </BrowserRouter>

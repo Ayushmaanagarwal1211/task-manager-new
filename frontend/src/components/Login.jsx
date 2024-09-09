@@ -29,7 +29,13 @@ export default function Login() {
       localStorage.setItem("token",result.token)
       
       if(result.id){
-        window.location.href="/dashboard "
+        if(localStorage.getItem("role")=="admin"){
+          window.location.href="/admin "
+
+        }else{
+
+          window.location.href="/dashboard "
+        }
       }
   }
   return (

@@ -5,7 +5,6 @@ const taskSchema = new mongoose.Schema({
     title: {
         type: String,
         required: true,
-        unique: true,
     },
     desc: {
         type: String,
@@ -15,7 +14,8 @@ const taskSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
-    user:{type:String}
+    user:{type:String},project:{type:String},
+    member:{type:String}
 }, { timestamps: true });
 
 const Task = mongoose.model("Task", taskSchema);

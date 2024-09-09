@@ -2,6 +2,7 @@ const router = require("express").Router();
 const User = require("../models/user");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const { authenticateToken } = require("./auth");
 
 // SIGN IN API (register new user)
 router.post("/sign-in", async (req, res) => {
@@ -81,7 +82,7 @@ console.log(existingUser)
            {
                 id: existingUser._id,
                 email: existingUser.email,
-                name: existingUser.name,
+                name: existingUser.username,
                 role: existingUser.role,
                 // Include other fields as needed
             },
@@ -100,6 +101,15 @@ router.get("/users", async (req, res) => {
     try {
         let users=await User.find()
         return res.status(200).json({users:users})
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({ message: "Intenal Server Error" });
+    }
+});
+router.get("/get",authenticateToken ,async (req, res) => {
+    try {
+     
+        return res.status(200).json({users:req.user})
     } catch (error) {
         console.log(error);
         return res.status(500).json({ message: "Intenal Server Error" });
